@@ -1,8 +1,8 @@
-﻿using System;
+﻿// updated 11/8/21 to clean out dead code that was commented out
+//                 and explain uncalled FindGpuDrivers() function left in
+using System;
 using System.Diagnostics;
 using System.Management;
-//using System.Data.Linq;
-//using System.Linq;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
@@ -63,7 +63,7 @@ namespace hv_bench
 
             FindAllGraphicsCards();
 
-            //FindGpuDrivers();
+            //FindGpuDrivers();     // only call as a diagnostic to query available gpu info
 
             myCpu = GetCpu();
             csvCores = GetCores();
@@ -141,33 +141,34 @@ namespace hv_bench
         }
 
         public void FindGpuDrivers()
+        // note: function call commented out in release version
+        // but useful to display all the gpu data elements available from the ManagementObjectSearcher
+        // after running this function I decided only the Name element looked useful for me 
         {
             using (var searcher = new ManagementObjectSearcher("select * from Win32_VideoController"))
             {
                 foreach (ManagementObject obj in searcher.Get())
                 {
                     MessageBox.Show("Name  -  " + obj["Name"] +
-                    //"\nDeviceID  -  " + obj["DeviceID"] + 
-                    //"\nAdapterRAM  -  " + obj["AdapterRAM"] +
-                    //"\nAdapterDACType  -  " + obj["AdapterDACType"] +
-                    //"\nMonochrome  -  " + obj["Monochrome"] +
+                    "\nDeviceID  -  " + obj["DeviceID"] + 
+                    "\nAdapterRAM  -  " + obj["AdapterRAM"] +
+                    "\nAdapterDACType  -  " + obj["AdapterDACType"] +
+                    "\nMonochrome  -  " + obj["Monochrome"] +
 
                     "\n\nCaption  -  " + obj["Caption"] +
-                    "\n\nDriverVersion  -  " + obj["DriverVersion"]);
-                    //"\nVideoProcessor  -  " + obj["VideoProcessor"] +
-                    //"\nVideoArchitecture  -  " + obj["VideoArchitecture"] +
-                    //"\n\nVideoMemoryType  -  " + obj["VideoMemoryType"] );
+                    "\n\nDriverVersion  -  " + obj["DriverVersion"] +
+                    "\nVideoProcessor  -  " + obj["VideoProcessor"] +
+                    "\nVideoArchitecture  -  " + obj["VideoArchitecture"] +
+                    "\n\nVideoMemoryType  -  " + obj["VideoMemoryType"] );
                 }
             }
 
         }
         
         public void FindAllGraphicsCards()
+        // called by release version and creates array from Name element list returned
+        // by ManagementObjectSearcher for use in gpu and decoder combo box dropdowns
         {
-            // find graphic card names
-            //            System.Text.Encoding utf_8 = System.Text.Encoding.UTF8;
-            string[] Decoder;
-
             List<string> list = new List<string>();
             using (var searcher = new ManagementObjectSearcher("select * from Win32_VideoController"))
             {
@@ -178,17 +179,11 @@ namespace hv_bench
             }
             GraphicsCards = list.ToArray();
 
-            Decoder = list.ToArray();
-
             // allow for selecting no decoder
             cmbDecoder.Items.Add("none");
 
             foreach (String card in GraphicsCards)
             {
-                //byte[] utf8Bytes = System.Text.Encoding.UTF8.GetBytes(card);
-                //string tmpStr = System.Text.Encoding.UTF8.GetString(utf8Bytes);
-                //cmbGraphicsCard.Items.Add(tmpStr);
-                //cmbDecoder.Items.Add(tmpStr);
                 cmbGraphicsCard.Items.Add(card);
                 cmbDecoder.Items.Add(card);
             }
@@ -265,22 +260,6 @@ namespace hv_bench
                                 cmbSampProj4K3.Items.Add(renderer.Name + " - " + renderTemplate.Name);
 
                                 tmpT = renderer.Name + " - " + renderTemplate.Name;
- /*                               if (false)
-                                {
-                                    if (tmpT.Contains("RedCar HD NVenc)") || tmpT.Contains("RedCar HD VCE)")) { myRcount1 = RCount; }
-                                        else if (tmpT.Contains("RedCar HD QSV)") || tmpT.Contains("RedCar HD NVenc)")) { myRcount2 = RCount; }
-                                        else if (tmpT.Contains("RedCar HD MC)")) { myRcount3 = RCount; }
-                                        else if (tmpT.Contains("(RedCar 4K NVenc)") || tmpT.Contains("(RedCar 4K VCE)")) { myRcount4 = RCount; }
-                                        else if (tmpT.Contains("RedCar 4K QSV)") || tmpT.Contains("RedCar 4K NVenc)")) { myRcount5 = RCount; }
-                                        else if (tmpT.Contains("RedCar 4K MC)")) { myRcount6 = RCount; }
-                                        else if (tmpT.Contains("SampProj HD NVenc)") || tmpT.Contains("SampProj HD VCE)")) { myScount1 = RCount; }
-                                        else if (tmpT.Contains("SampProj HD QSV)") || tmpT.Contains("SampProj HD NVenc)")) { myScount2 = RCount; }
-                                        else if (tmpT.Contains("(SampProj HD MC)")) { myScount3 = RCount; }
-                                        else if (tmpT.Contains("SampProj 4K NVenc)") || tmpT.Contains("SampProj 4K VCE)")) { myScount4 = RCount; }
-                                        else if (tmpT.Contains("SampProj 4K QSV)") || tmpT.Contains("SampProj 4K NVenc)")) { myScount5 = RCount; }
-                                        else if (tmpT.Contains("SampProj 4K MC")) { myScount6 = RCount; }
-                                    } else  {
-*/
                                         if (tmpT.Contains("RedCar HD NVenc)") || tmpT.Contains("RedCar HD VCE)")) { myRcount1 = RCount; }
                                         if (tmpT.Contains("RedCar HD QSV)") || tmpT.Contains("RedCar HD NVenc)")) { myRcount2 = RCount; }
                                         if (tmpT.Contains("RedCar HD MC)")) { myRcount3 = RCount; }
@@ -294,7 +273,6 @@ namespace hv_bench
                                         if (tmpT.Contains("SampProj 4K QSV)") || tmpT.Contains("SampProj 4K NVenc)")) { myScount5 = RCount; }
                                         if (tmpT.Contains("SampProj 4K MC")) { myScount6 = RCount; }
 
-//                                    }
                                 RCount++;
                             }
                         }
@@ -481,25 +459,9 @@ namespace hv_bench
             }
             else csvCpu = myCpu;
 
-            //update 10/1/21
-            //tmpTxt = (string)cmbGraphicsCard.Text;
-            //if (tmpTxt.Contains("1050 Ti")) { csvGpu = "1050ti"; }
-            //else if (tmpTxt.Contains("5700")) { csvGpu = "5700xt"; }
-            //else if (tmpTxt.Contains("7")) { csvGpu = "Radeon7"; }
-            //else if (tmpTxt.Contains("64")) { csvGpu = "Vega 64"; }
-            //else if (tmpTxt.Contains("Vega")) { csvGpu = "Vega M"; }
-            //else if (tmpTxt.Contains("1660")) { csvGpu = "gtx1660"; }
-            //else if (tmpTxt.ToString().Contains("630")) { csvGpu = "uhd630"; }
-            //else { csvGpu = cmbGraphicsCard.Text; }
             csvGpu = cmbGraphicsCard.Text;
 
             tmpTxt = (string)cmbDecoder.Text.ToLower();
-            //if (tmpTxt.Contains("630")) { csvIgpu = "UHD630"; csvDecoder = "QSV"; }
-            //else if (tmpTxt.Contains("1660")) { csvIgpu = "gtx1660"; csvDecoder = "NVdec"; }
-            //else if (tmpTxt.Contains("1050")) { csvIgpu = "gtx1050ti"; csvDecoder = "NVdec"; }
-            //else if (tmpTxt.Contains("5700")) { csvIgpu = "5700xt"; csvDecoder = "VCE"; }
-            //else if (tmpTxt.Contains("7")) { csvIgpu = "Radeon7"; csvDecoder = "VCE"; }
-            //else { csvIgpu = cmbDecoder.Text; csvDecoder = ""; }
             csvIgpu = cmbDecoder.Text;
             if (tmpTxt.Contains("uhd")) { csvDecoder = "QSV"; }
              else if (tmpTxt.Contains("1660")) { csvDecoder = "NVdec"; }
@@ -507,14 +469,6 @@ namespace hv_bench
              else if (tmpTxt.Contains("5700")) { csvDecoder = "VCE"; }
              else if (tmpTxt.Contains("vii")) { csvDecoder = "VCE"; }
              else { csvDecoder = ""; }
-
-            // initialize the sleep-between-renders progress bar
-            //progressBar1.Minimum = 0;
-            //progressBar1.Maximum = sleepCount;
-            //progressBar1.Step = 1;
-            //progressBar1.Value = 0;
-            //progressBar1.Visible = false;
-            //this.progressBar1.Refresh();
 
 
             bool FHDchecked = cbSampProjHD1.Checked || cbSampProjHD2.Checked || cbSampProjHD3.Checked ||
@@ -526,7 +480,7 @@ namespace hv_bench
             // append to or create a csv file to log elapsed times
             csvFile = "render time " + dateNow + " (" + csvCpu + " v" + csvVersion + ").csv";
 
-            //MessageBox.Show("creating csvFile: " + csvFile);
+            //MessageBox.Show("creating csvFile: " + csvFile);   // disgnostic display only
 
             File.AppendAllText(txtDirBox.Text + csvFile,
                     "version,cpu,cores,gpu,igpu,frame,render as,encode,decode,SampProj,RedCar,RedCar4K,RedCarHevc,RedCarProRes");
@@ -545,8 +499,6 @@ namespace hv_bench
         {
             Renderer myRenderer = FullRenderer[cmbRenderType.SelectedIndex];
             RenderTemplate myTemplate = FullTemplate[cmbRenderType.SelectedIndex];
-
-            //            fileCount = -10;
 
             // init for dry run count up
             fileCount = 0;
@@ -874,13 +826,6 @@ namespace hv_bench
                             framestuff = true;
                         }
 
-                        //if (csvSampProj != "" && csvRedCar == "" && csvRedCar4K == "" && csvRedCarHevc == "" && csvRedCarProRes == "")
-                        //                      //if (FullFileName.Contains("10 Sample")) { csvSampProj = timeTaken.ToString(@"m\:ss"); }
-                        //                      //else if (FullFileName.Contains("20 RedCar")) { csvRedCar = timeTaken.ToString(@"m\:ss"); }
-                        //                      //else if (FullFileName.Contains("30 4k RedCar")) { csvRedCar4K = timeTaken.ToString(@"m\:ss"); }
-                        //                      //else if (FullFileName.Contains("40 RedCar HEVC")) { csvRedCarHevc = timeTaken.ToString(@"m\:ss"); }
-                        //                      //else if (FullFileName.Contains("50 RedCar ProRes")) { csvRedCarProRes = timeTaken.ToString(@"m\:ss"); }
-
                         if (FullFileName.Contains("10 Sample"))
                         {
                             File.AppendAllText(txtDirBox.Text + csvFile,
@@ -991,35 +936,6 @@ namespace hv_bench
                     }
 
                 } // end files
-
-                if (!dryrun)
-                {
-                    /*
-                    // update csv file after reps for each file completed...
-                    // expect that render time has been updated after each rep
-                    // (default is time for last rep unless adjusted in render function)
-                    //                    string date = DateTime.UtcNow.ToString("yyyy-MM-dd");
-
-                    // File.AppendAllText(txtDirBox.Text + "render_times.csv",
-                    File.AppendAllText(txtDirBox.Text + csvFile,
-                        csvVersion + "," +
-                        csvCpu + "," +
-                        csvCores + "," +
-                        csvGpu + "," +
-                        csvIgpu + "," +
-                        csvFrame + "," +
-                        csvRender + "," +
-                        csvEncode + "," +
-                        csvDecoder + "," +
-                        csvSampProj + "," +
-                        csvRedCar + "," +
-                        csvRedCar4K + "," +
-                        csvRedCarHevc + "," +
-                        csvRedCarProRes + "\n");
-                    */
-                    // since all timings already output, just pump out a linefeed
-                    //File.AppendAllText(txtDirBox.Text + csvFile, "\n");
-                }
 
             } // end encodes
 
