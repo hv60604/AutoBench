@@ -1,4 +1,5 @@
-﻿// updated 11/8/21 to clean out dead code that was commented out
+﻿// updated 11/9/21 cleaned out a few more commented out code lines in DoRender()
+// updated 11/8/21 to clean out dead code that was commented out
 //                 and explain uncalled FindGpuDrivers() function left in
 using System;
 using System.Diagnostics;
@@ -1005,15 +1006,16 @@ namespace hv_bench
             // ********* VEGAS RENDER ****************
             // ********* VEGAS RENDER ****************
 
+            // transfer control to Vegas requesting render
             RenderStatus status = myVegas.Render(args);
 
+
+            // control is back... see if render was interrupted 
             if (exit) {
                 btnRender.Text = "Render";
                 btnRender.Enabled = true;
                 return; 
             }
-
-            //RenderStatus status = Vegas.Render(fileName, rndrTemplate, start, length);
 
             // if the render completed successfully, just return
             if (status == RenderStatus.Complete)
