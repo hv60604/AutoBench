@@ -1,19 +1,24 @@
 # AutoBench
 Automated benchmarking script for Vegas Pro Video
+
 These folders will help installing and using this script
+
+When run sucessfully, this script will create a .CSV table file in the output directory chosen for renders.  This file can be loaded into Excel.
 
 
 Render Templates
 
-     The script looks for sub-strings of the Render Template name to distinguish RedCar templates from SampleProject
+     The script looks for sub-strings of the Render Template name, enclosed in parentheses in the exaple templates.
 
-     Also to distinguish 4K templates from HD
+     These tokens distinguish RedCar templates from SampleProject.
 
-     And also to distinguish MainConcept (MC), Nvidia (Nvenc), AND (VCE), and Intel (Qsv)
+     Also distinguish 4K templates from HD
+
+     And also distinguish MainConcept (MC), Nvidia (Nvenc), AND (VCE), and Intel (Qsv) encoders
 
      If you copy the contents of "Render Templates" to "C:\Users\<User Name>\AppData\Roaming\VEGAS\Render Templates" you'll have the ones recognised.
 
-     Note that I only use AVC templates (in that sub-folder) for benchmarking but you can make your own for other codecs with Vegas.
+     Note that I only use Magix AVC templates (in the AVC sub-folder under Roaming) for benchmarking but you can make your own for other codecs with Vegas.
 
      Once there under Roaming, they will show up in all Vesions of Vegas that you have installed.
 
@@ -24,7 +29,11 @@ Render Templates
      Or just follow the name convention and make them yourself with your version of Vegas.
 
      Suggest you only copy the templates for the hardware you have to avoid confusing the script or Vegas.
-
+     
+     The script is designed to run 3 different hardware encoders for both RedCar and SampleProject rendered to both HD and 4k. But you can uncheck encoder templates in the script's form if you want to run fewer.
+     
+     Note that the script runs each render twice with a cooling-off period between renders and records the best of the 2 times in the output file.  I don't have this behavior adjustable in this version.
+     
 
 Vegas Script Menu
 
