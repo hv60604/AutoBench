@@ -1,0 +1,16 @@
+// example supported commands:
+//
+// RenderDir=D:\temp\
+// ProjDir=D:\Benchmarks\
+// Sleep= 2500  {approx 60secs}
+// GPU=gtx1050ti  {force GPU}
+// GPU=  gtx1050ti
+// Decoder= none  {force Decoder}
+// Decoder= uhd630
+
+RenderDir=D:\temp\
+ProjDir=D:\benchmarks\
+Sleep= 2500
+CPU= i7-8750g
+GPU= gtx1050ti
+Decoder= uhd630
