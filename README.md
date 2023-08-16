@@ -44,9 +44,11 @@ Vegas Script Menu
      If the folder is already there, just add the contents to the custom scripts already in it.
 
 
-     AutoBench.DLL is the script, in DLL form to include Microsoft Visual Studio 19 library code not in Vegas.
+     AutoBench.DLL is the compiled script, in DLL form to include Microsoft Visual Studio 19 library code not in Vegas.
 
      This enables the script to probe the os for hardware and use optional methods Vegas itself does not provide.
+
+     The C# source code is Form1.cs and the graphical design of the Form and it's fields is Form1.Designer.cs.
 
      If you alter the script with Visual Studio 19 and recompile your solution, it will appear in the "AutoBench/bin/Release" folder
 
